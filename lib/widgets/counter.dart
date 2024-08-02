@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:streak_counters/models/counter.dart';
+import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
 
 class CounterWidget extends StatefulWidget {
-  final Counter counter;
+  final Streak counter;
   final ObjectBoxHelper objectBox;
   final VoidCallback onUpdate;
 
@@ -55,7 +55,7 @@ class _CounterWidgetState extends State<CounterWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.counter.key,
+              widget.counter.name,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             Text(

@@ -15,30 +15,29 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'models/counter.dart';
+import 'models/streak.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(1, 2330760068852719877),
-      name: 'Counter',
-      lastPropertyId: const obx_int.IdUid(3, 960165285155561647),
+      id: const obx_int.IdUid(3, 1364452685146486954),
+      name: 'Streak',
+      lastPropertyId: const obx_int.IdUid(3, 8384775330454895822),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 5852144933446586966),
+            id: const obx_int.IdUid(1, 7846873932332357119),
             name: 'id',
             type: 6,
             flags: 1),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 8394868281841413257),
-            name: 'key',
+            id: const obx_int.IdUid(2, 8220556922898315814),
+            name: 'name',
             type: 9,
-            flags: 2080,
-            indexId: const obx_int.IdUid(1, 8360932502398907500)),
+            flags: 0),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 960165285155561647),
+            id: const obx_int.IdUid(3, 8384775330454895822),
             name: 'value',
             type: 6,
             flags: 0)
@@ -82,32 +81,40 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 2330760068852719877),
+      lastEntityId: const obx_int.IdUid(3, 1364452685146486954),
       lastIndexId: const obx_int.IdUid(1, 8360932502398907500),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredEntityUids: const [2330760068852719877, 5993578998911691831],
+      retiredIndexUids: const [8360932502398907500],
+      retiredPropertyUids: const [
+        8394868281841413257,
+        5852144933446586966,
+        960165285155561647,
+        643464918743923611,
+        8726458545647828736,
+        1695832062399989068,
+        315528777935659263
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    Counter: obx_int.EntityDefinition<Counter>(
+    Streak: obx_int.EntityDefinition<Streak>(
         model: _entities[0],
-        toOneRelations: (Counter object) => [],
-        toManyRelations: (Counter object) => {},
-        getId: (Counter object) => object.id,
-        setId: (Counter object, int id) {
+        toOneRelations: (Streak object) => [],
+        toManyRelations: (Streak object) => {},
+        getId: (Streak object) => object.id,
+        setId: (Streak object, int id) {
           object.id = id;
         },
-        objectToFB: (Counter object, fb.Builder fbb) {
-          final keyOffset = fbb.writeString(object.key);
+        objectToFB: (Streak object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
           fbb.startTable(4);
           fbb.addInt64(0, object.id);
-          fbb.addOffset(1, keyOffset);
+          fbb.addOffset(1, nameOffset);
           fbb.addInt64(2, object.value);
           fbb.finish(fbb.endTable());
           return object.id;
@@ -115,11 +122,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectFromFB: (obx.Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-          final keyParam = const fb.StringReader(asciiOptimization: true)
+          final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
           final valueParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
-          final object = Counter(key: keyParam, value: valueParam)
+          final object = Streak(name: nameParam, value: valueParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -129,17 +136,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
   return obx_int.ModelDefinition(model, bindings);
 }
 
-/// [Counter] entity fields to define ObjectBox queries.
-class Counter_ {
-  /// see [Counter.id]
+/// [Streak] entity fields to define ObjectBox queries.
+class Streak_ {
+  /// see [Streak.id]
   static final id =
-      obx.QueryIntegerProperty<Counter>(_entities[0].properties[0]);
+      obx.QueryIntegerProperty<Streak>(_entities[0].properties[0]);
 
-  /// see [Counter.key]
-  static final key =
-      obx.QueryStringProperty<Counter>(_entities[0].properties[1]);
+  /// see [Streak.name]
+  static final name =
+      obx.QueryStringProperty<Streak>(_entities[0].properties[1]);
 
-  /// see [Counter.value]
+  /// see [Streak.value]
   static final value =
-      obx.QueryIntegerProperty<Counter>(_entities[0].properties[2]);
+      obx.QueryIntegerProperty<Streak>(_entities[0].properties[2]);
 }

@@ -1,12 +1,12 @@
 import 'package:streak_counters/objectbox.g.dart'; // generated code
-import 'package:streak_counters/models/counter.dart';
+import 'package:streak_counters/models/streak.dart';
 
 class ObjectBoxHelper {
   late final Store store;
-  late final Box<Counter> counterBox;
+  late final Box<Streak> counterBox;
 
   ObjectBoxHelper._create(this.store) {
-    counterBox = Box<Counter>(store);
+    counterBox = Box<Streak>(store);
   }
 
   static Future<ObjectBoxHelper> create() async {
@@ -14,15 +14,15 @@ class ObjectBoxHelper {
     return ObjectBoxHelper._create(store);
   }
 
-  void addCounter(Counter counter) {
+  void addCounter(Streak counter) {
     counterBox.put(counter);
   }
 
-  List<Counter> getAllCounters() {
+  List<Streak> getAllCounters() {
     return counterBox.getAll();
   }
 
-  void updateCounter(Counter counter) {
+  void updateCounter(Streak counter) {
     counterBox.put(counter);
   }
 

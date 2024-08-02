@@ -4,25 +4,23 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2330760068852719877",
-      "lastPropertyId": "3:960165285155561647",
-      "name": "Counter",
+      "id": "3:1364452685146486954",
+      "lastPropertyId": "3:8384775330454895822",
+      "name": "Streak",
       "properties": [
         {
-          "id": "1:5852144933446586966",
+          "id": "1:7846873932332357119",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:8394868281841413257",
-          "name": "key",
-          "type": 9,
-          "flags": 2080,
-          "indexId": "1:8360932502398907500"
+          "id": "2:8220556922898315814",
+          "name": "name",
+          "type": 9
         },
         {
-          "id": "3:960165285155561647",
+          "id": "3:8384775330454895822",
           "name": "value",
           "type": 6
         }
@@ -30,15 +28,28 @@
       "relations": []
     }
   ],
-  "lastEntityId": "1:2330760068852719877",
+  "lastEntityId": "3:1364452685146486954",
   "lastIndexId": "1:8360932502398907500",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredEntityUids": [
+    2330760068852719877,
+    5993578998911691831
+  ],
+  "retiredIndexUids": [
+    8360932502398907500
+  ],
+  "retiredPropertyUids": [
+    8394868281841413257,
+    5852144933446586966,
+    960165285155561647,
+    643464918743923611,
+    8726458545647828736,
+    1695832062399989068,
+    315528777935659263
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
