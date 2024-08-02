@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:namer_app/components/counter.dart';
+import '../components/counter.dart';
 
 class CounterHomePage extends StatefulWidget {
   @override

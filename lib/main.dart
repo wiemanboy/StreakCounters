@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/pages/home.dart';
+import 'package:streak_counters/pages/home.dart';
 
 void main() {
   runApp(CounterApp());
