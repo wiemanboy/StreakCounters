@@ -1,5 +1,5 @@
+import 'package:objectbox/objectbox.dart';
 import 'package:streak_counters/models/streak.dart';
-
 import '../objectbox.dart';
 import 'enums/count_state.dart';
 
@@ -11,36 +11,45 @@ class Count {
   ToOne<Streak> streak = ToOne<Streak>();
 
   @Property(type: PropertyType.date)
-  late DateTime date;
+  DateTime date;
+
+  @Property(type: PropertyType.int)
+  int? dbCountStateIndex;
 
   @Transient()
   CountState? countState;
 
-  int? get dbCountState {
-    CountState.ensureStableEnumValues();
-    return countState?.index;
+  Count({required this.date, this.countState}) {
+    dbCountStateIndex = countState?.index;
   }
 
-  set dbCountState(int? value) {
+  CountState? get dbCountState {
     CountState.ensureStableEnumValues();
-    if (value == null) {
-      countState = null;
-    } else {
-      countState = CountState.values[value]; // throws a RangeError if not found
-    }
+    return dbCountStateIndex != null
+        ? CountState.values[dbCountStateIndex!]
+        : null;
   }
 
-  Count({this.countState = CountState.missed, required DateTime date});
+  set dbCountState(CountState? value) {
+    CountState.ensureStableEnumValues();
+    dbCountStateIndex = value?.index;
+  }
 
-  bool isActiveOn(DateTime date) {
-    final dayBefore = date.subtract(Duration(days: 1));
-    return this.date.isAfter(dayBefore) &&
-        this.date.isBefore(date.add(Duration(days: 1))) &&
-        isActive();
+  bool isCompleted() {
+    return countState == CountState.completed;
+  }
+
+  bool isSkipped() {
+    return countState == CountState.skipped;
   }
 
   bool isActive() {
-    return countState == CountState.completed ||
-        countState == CountState.skipped;
+    return isCompleted() || isSkipped();
+  }
+
+  bool isOn(DateTime date) {
+    return this.date.year == date.year &&
+        this.date.month == date.month &&
+        this.date.day == date.day;
   }
 }

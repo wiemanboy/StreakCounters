@@ -3,13 +3,13 @@ import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
 
 class CounterWidget extends StatefulWidget {
-  final Streak counter;
+  final Streak streak;
   final ObjectBoxHelper objectBox;
   final VoidCallback onUpdate;
 
   CounterWidget({
     Key? key,
-    required this.counter,
+    required this.streak,
     required this.objectBox,
     required this.onUpdate,
   }) : super(key: key);
@@ -19,28 +19,19 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterWidgetState extends State<CounterWidget> {
-  late int counterValue;
+  late int streakValue;
 
   @override
   void initState() {
     super.initState();
-    counterValue = widget.counter.value;
+    streakValue = widget.streak.getStreakLength();
   }
 
-  void incrementCounter() {
+ void completeCounter() {
     setState(() {
-      counterValue++;
-      widget.counter.value = counterValue;
-      widget.objectBox.updateCounter(widget.counter);
-    });
-    widget.onUpdate();
-  }
-
-  void decrementCounter() {
-    setState(() {
-      counterValue--;
-      widget.counter.value = counterValue;
-      widget.objectBox.updateCounter(widget.counter);
+      widget.streak.completeToday();
+      widget.objectBox.updateCounter(widget.streak);
+      streakValue = widget.streak.getStreakLength();
     });
     widget.onUpdate();
   }
@@ -55,23 +46,18 @@ class _CounterWidgetState extends State<CounterWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.counter.name,
+              widget.streak.name,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             Text(
-              '$counterValue',
+              '$streakValue',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: decrementCounter,
-                  tooltip: 'Decrement',
-                  icon: Icon(Icons.remove),
-                ),
-                IconButton(
-                  onPressed: incrementCounter,
+                  onPressed: completeCounter,
                   tooltip: 'Increment',
                   icon: Icon(Icons.add),
                 ),

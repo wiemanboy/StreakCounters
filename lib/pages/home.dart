@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
 
-import '../widgets/counter.dart';
+import '../widgets/streak_counter.dart';
 
 class CounterHomePage extends StatefulWidget {
   final ObjectBoxHelper objectBox;
@@ -14,24 +14,24 @@ class CounterHomePage extends StatefulWidget {
 }
 
 class _CounterHomePageState extends State<CounterHomePage> {
-  List<Streak> counters = [];
+  List<Streak> streaks = [];
 
   @override
   void initState() {
     super.initState();
-    loadCounters();
+    loadStreakCounters();
   }
 
-  void loadCounters() {
+  void loadStreakCounters() {
     setState(() {
-      counters = widget.objectBox.getAllCounters();
+      streaks = widget.objectBox.getAllCounters();
     });
   }
 
   void addCounter() {
     final newCounter = Streak(name: UniqueKey().toString());
     widget.objectBox.addCounter(newCounter);
-    loadCounters();
+    loadStreakCounters();
   }
 
   @override
@@ -41,12 +41,12 @@ class _CounterHomePageState extends State<CounterHomePage> {
         title: Text('Counter App'),
       ),
       body: ListView.builder(
-        itemCount: counters.length,
+        itemCount: streaks.length,
         itemBuilder: (context, index) {
           return CounterWidget(
-            counter: counters[index],
+            streak: streaks[index],
             objectBox: widget.objectBox,
-            onUpdate: loadCounters,
+            onUpdate: loadStreakCounters,
           );
         },
       ),

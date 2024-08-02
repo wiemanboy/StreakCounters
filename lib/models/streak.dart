@@ -9,36 +9,36 @@ class Streak {
 
   String name;
 
-  int value;
-
   @Backlink()
   ToMany<Count> counts = ToMany<Count>();
 
-  Streak({required this.name, this.value = 0});
+  Streak({required this.name});
 
   void completeToday() {
-    counts.add(Count(date: DateTime.now(), countState: CountState.completed));
+    addCount(Count(date: DateTime.now(), countState: CountState.completed));
   }
 
-  bool isActive(DateTime date) {
-    if (counts.isEmpty) {
-      return false;
+  void addCount(Count newCount) {
+    if (isCompletedToday()) {
+      return;
     }
-    return counts.last.isActiveOn(date);
+    counts.add(Count(date: newCount.date, countState: newCount.countState));
   }
 
-  bool isActiveToday() {
-    return isActive(DateTime.now());
+  bool isCompletedToday() {
+    return isCompletedOn(DateTime.now());
+  }
+
+  bool isCompletedOn(DateTime date) {
+    return counts.any((Count count) =>
+        count.isOn(date) &&
+        count.isCompleted());
   }
 
   int getStreakLength() {
-    final today = DateTime.now();
-
-    final streakCounts = counts.reversed
-        .takeWhile((count) => count.isActiveOn(today
-            .subtract(Duration(days: counts.reversed.toList().indexOf(count)))))
-        .toList();
-
-    return streakCounts.length;
+    return counts.reversed
+        .takeWhile((Count count) => count.isActive())
+        .where((Count count) => count.isCompleted())
+        .length;
   }
 }
