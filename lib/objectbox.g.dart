@@ -15,6 +15,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'models/count.dart';
 import 'models/streak.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
@@ -39,6 +40,39 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(3, 8384775330454895822),
             name: 'value',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[
+        obx_int.ModelBacklink(name: 'counts', srcEntity: 'Count', srcField: '')
+      ]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(4, 4618448775489027494),
+      name: 'Count',
+      lastPropertyId: const obx_int.IdUid(6, 7848157046580722658),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 65500660315973313),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 2408943094135220943),
+            name: 'date',
+            type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 5851129747544368323),
+            name: 'streakId',
+            type: 11,
+            flags: 520,
+            indexId: const obx_int.IdUid(3, 7087276133968963353),
+            relationTarget: 'Streak'),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 7848157046580722658),
+            name: 'dbCountState',
             type: 6,
             flags: 0)
       ],
@@ -81,12 +115,12 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(3, 1364452685146486954),
-      lastIndexId: const obx_int.IdUid(1, 8360932502398907500),
+      lastEntityId: const obx_int.IdUid(4, 4618448775489027494),
+      lastIndexId: const obx_int.IdUid(3, 7087276133968963353),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [2330760068852719877, 5993578998911691831],
-      retiredIndexUids: const [8360932502398907500],
+      retiredIndexUids: const [8360932502398907500, 6837733886811224356],
       retiredPropertyUids: const [
         8394868281841413257,
         5852144933446586966,
@@ -94,7 +128,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         643464918743923611,
         8726458545647828736,
         1695832062399989068,
-        315528777935659263
+        315528777935659263,
+        655768181242291161,
+        1731627768947832573
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -105,7 +141,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
     Streak: obx_int.EntityDefinition<Streak>(
         model: _entities[0],
         toOneRelations: (Streak object) => [],
-        toManyRelations: (Streak object) => {},
+        toManyRelations: (Streak object) => {
+              obx_int.RelInfo<Count>.toOneBacklink(
+                      5, object.id, (Count srcObject) => srcObject.streak):
+                  object.counts
+            },
         getId: (Streak object) => object.id,
         setId: (Streak object, int id) {
           object.id = id;
@@ -128,7 +168,42 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
           final object = Streak(name: nameParam, value: valueParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
+          obx_int.InternalToManyAccess.setRelInfo<Streak>(
+              object.counts,
+              store,
+              obx_int.RelInfo<Count>.toOneBacklink(
+                  5, object.id, (Count srcObject) => srcObject.streak));
+          return object;
+        }),
+    Count: obx_int.EntityDefinition<Count>(
+        model: _entities[1],
+        toOneRelations: (Count object) => [object.streak],
+        toManyRelations: (Count object) => {},
+        getId: (Count object) => object.id,
+        setId: (Count object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Count object, fb.Builder fbb) {
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.date.millisecondsSinceEpoch);
+          fbb.addInt64(4, object.streak.targetId);
+          fbb.addInt64(5, object.dbCountState);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final dateParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0));
+          final object = Count(date: dateParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..dbCountState = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 14);
+          object.streak.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          object.streak.attach(store);
           return object;
         })
   };
@@ -149,4 +224,24 @@ class Streak_ {
   /// see [Streak.value]
   static final value =
       obx.QueryIntegerProperty<Streak>(_entities[0].properties[2]);
+
+  /// see [Streak.counts]
+  static final counts = obx.QueryBacklinkToMany<Count, Streak>(Count_.streak);
+}
+
+/// [Count] entity fields to define ObjectBox queries.
+class Count_ {
+  /// see [Count.id]
+  static final id = obx.QueryIntegerProperty<Count>(_entities[1].properties[0]);
+
+  /// see [Count.date]
+  static final date = obx.QueryDateProperty<Count>(_entities[1].properties[1]);
+
+  /// see [Count.streak]
+  static final streak =
+      obx.QueryRelationToOne<Count, Streak>(_entities[1].properties[2]);
+
+  /// see [Count.dbCountState]
+  static final dbCountState =
+      obx.QueryIntegerProperty<Count>(_entities[1].properties[3]);
 }
