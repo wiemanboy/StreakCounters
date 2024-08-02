@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../components/counter.dart';
+import 'package:streak_counters/models/counter.dart';
+import 'package:streak_counters/services/objectbox_helper.dart';
+
+import '../widgets/counter.dart';
 
 class CounterHomePage extends StatefulWidget {
+  final ObjectBoxHelper objectBox;
+
+  CounterHomePage({required this.objectBox});
+
   @override
   _CounterHomePageState createState() => _CounterHomePageState();
 }
 
 class _CounterHomePageState extends State<CounterHomePage> {
-  List<String> counterKeys = [];
+  List<Counter> counters = [];
 
   @override
   void initState() {
     super.initState();
-    loadCounterKeys();
+    loadCounters();
   }
 
-  Future<void> loadCounterKeys() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+  void loadCounters() {
     setState(() {
-      counterKeys = preferences.getStringList('counterKeys') ?? [];
+      counters = widget.objectBox.getAllCounters();
     });
-  }
-
-  Future<void> saveCounterKeys() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setStringList('counterKeys', counterKeys);
   }
 
   void addCounter() {
-    setState(() {
-      String newCounterKey = UniqueKey().toString();
-      counterKeys.add(newCounterKey);
-      saveCounterKeys();
-    });
+    final newCounter = Counter(key: UniqueKey().toString());
+    widget.objectBox.addCounter(newCounter);
+    loadCounters();
   }
 
   @override
@@ -43,9 +41,13 @@ class _CounterHomePageState extends State<CounterHomePage> {
         title: Text('Counter App'),
       ),
       body: ListView.builder(
-        itemCount: counterKeys.length,
+        itemCount: counters.length,
         itemBuilder: (context, index) {
-          return Counter(key: Key(counterKeys[index]), counterKey: counterKeys[index]);
+          return CounterWidget(
+            counter: counters[index],
+            objectBox: widget.objectBox,
+            onUpdate: loadCounters,
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

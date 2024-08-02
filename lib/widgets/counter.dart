@@ -1,48 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:streak_counters/models/counter.dart';
+import 'package:streak_counters/services/objectbox_helper.dart';
 
-class Counter extends StatefulWidget {
-  final String counterKey;
+class CounterWidget extends StatefulWidget {
+  final Counter counter;
+  final ObjectBoxHelper objectBox;
+  final VoidCallback onUpdate;
 
-  Counter({Key? key, required this.counterKey}) : super(key: key);
+  CounterWidget({
+    Key? key,
+    required this.counter,
+    required this.objectBox,
+    required this.onUpdate,
+  }) : super(key: key);
 
   @override
-  _CounterState createState() => _CounterState();
+  _CounterWidgetState createState() => _CounterWidgetState();
 }
 
-class _CounterState extends State<Counter> {
-  int counter = 0;
+class _CounterWidgetState extends State<CounterWidget> {
+  late int counterValue;
 
   @override
   void initState() {
     super.initState();
-    loadCounter();
-  }
-
-  Future<void> loadCounter() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      counter = preferences.getInt(widget.counterKey) ?? 0;
-    });
-  }
-
-  Future<void> saveCounter() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setInt(widget.counterKey, counter);
+    counterValue = widget.counter.value;
   }
 
   void incrementCounter() {
     setState(() {
-      counter++;
-      saveCounter();
+      counterValue++;
+      widget.counter.value = counterValue;
+      widget.objectBox.updateCounter(widget.counter);
     });
+    widget.onUpdate();
   }
 
   void decrementCounter() {
     setState(() {
-      counter--;
-      saveCounter();
+      counterValue--;
+      widget.counter.value = counterValue;
+      widget.objectBox.updateCounter(widget.counter);
     });
+    widget.onUpdate();
   }
 
   @override
@@ -55,11 +55,11 @@ class _CounterState extends State<Counter> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Counter ${widget.counterKey}',
+              widget.counter.key,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             Text(
-              '$counter',
+              '$counterValue',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Row(
