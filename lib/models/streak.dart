@@ -25,19 +25,34 @@ class Streak {
     counts.add(Count(date: newCount.date, countState: newCount.countState));
   }
 
+  bool isActiveOn(DateTime date) {
+    return counts.any((Count count) => count.isOn(date) && count.isActive());
+  }
+
+  bool isActiveToday() {
+    return isActiveOn(DateTime.now());
+  }
+
+  bool isCompletedOn(DateTime date) {
+    return counts.any((Count count) => count.isOn(date) && count.isCompleted());
+  }
+
   bool isCompletedToday() {
     return isCompletedOn(DateTime.now());
   }
 
-  bool isCompletedOn(DateTime date) {
-    return counts.any((Count count) =>
-        count.isOn(date) &&
-        count.isCompleted());
-  }
-
   int getStreakLength() {
-    return counts.reversed
-        .takeWhile((Count count) => count.isActive())
+    if (counts.isEmpty || !isActiveToday()) {
+      return 0;
+    }
+
+    counts.sort((Count countA, Count countB) => countB.compareDate(countA));
+
+    return counts
+        .takeWhile((Count count) =>
+            count.isActive() &&
+            count.dateDifference(DateTime.now()).inDays * -1 ==
+                counts.indexOf(count))
         .where((Count count) => count.isCompleted())
         .length;
   }

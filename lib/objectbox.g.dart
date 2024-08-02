@@ -45,7 +45,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 4618448775489027494),
       name: 'Count',
-      lastPropertyId: const obx_int.IdUid(7, 4807506222472023369),
+      lastPropertyId: const obx_int.IdUid(8, 4801519771958210271),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -66,9 +66,9 @@ final _entities = <obx_int.ModelEntity>[
             indexId: const obx_int.IdUid(3, 7087276133968963353),
             relationTarget: 'Streak'),
         obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 4807506222472023369),
-            name: 'dbCountStateIndex',
-            type: 5,
+            id: const obx_int.IdUid(8, 4801519771958210271),
+            name: 'dbCountState',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -127,7 +127,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         655768181242291161,
         1731627768947832573,
         8384775330454895822,
-        7848157046580722658
+        7848157046580722658,
+        4807506222472023369
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -178,11 +179,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (Count object, fb.Builder fbb) {
-          fbb.startTable(8);
+          fbb.startTable(9);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.date.millisecondsSinceEpoch);
           fbb.addInt64(4, object.streak.targetId);
-          fbb.addInt32(6, object.dbCountStateIndex);
+          fbb.addInt64(7, object.dbCountState);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -193,8 +194,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0));
           final object = Count(date: dateParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..dbCountStateIndex = const fb.Int32Reader()
-                .vTableGetNullable(buffer, rootOffset, 16);
+            ..dbCountState = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 18);
           object.streak.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           object.streak.attach(store);
@@ -231,7 +232,7 @@ class Count_ {
   static final streak =
       obx.QueryRelationToOne<Count, Streak>(_entities[1].properties[2]);
 
-  /// see [Count.dbCountStateIndex]
-  static final dbCountStateIndex =
+  /// see [Count.dbCountState]
+  static final dbCountState =
       obx.QueryIntegerProperty<Count>(_entities[1].properties[3]);
 }

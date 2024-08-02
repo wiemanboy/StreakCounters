@@ -13,26 +13,17 @@ class Count {
   @Property(type: PropertyType.date)
   DateTime date;
 
-  @Property(type: PropertyType.int)
-  int? dbCountStateIndex;
-
   @Transient()
   CountState? countState;
 
-  Count({required this.date, this.countState}) {
-    dbCountStateIndex = countState?.index;
+  Count({required this.date, this.countState});
+
+  int? get dbCountState {
+    return countState?.index;
   }
 
-  CountState? get dbCountState {
-    CountState.ensureStableEnumValues();
-    return dbCountStateIndex != null
-        ? CountState.values[dbCountStateIndex!]
-        : null;
-  }
-
-  set dbCountState(CountState? value) {
-    CountState.ensureStableEnumValues();
-    dbCountStateIndex = value?.index;
+  set dbCountState(int? value) {
+    countState = value != null ? CountState.values[value] : null;
   }
 
   bool isCompleted() {
@@ -51,5 +42,13 @@ class Count {
     return this.date.year == date.year &&
         this.date.month == date.month &&
         this.date.day == date.day;
+  }
+
+  int compareDate(Count other) {
+    return date.compareTo(other.date);
+  }
+
+  Duration dateDifference(DateTime date) {
+    return this.date.difference(date);
   }
 }
