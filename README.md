@@ -19,3 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 ```bash
 dart run build_runner build
 ```
+
+## Deplopyment
+```bash
+dart run flutter_launcher_icons
+flutter build apk --release
+```
