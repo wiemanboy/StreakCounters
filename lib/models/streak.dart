@@ -60,11 +60,21 @@ class Streak {
     counts.sort((Count countA, Count countB) => countB.compareDate(countA));
 
     return counts
-        .takeWhile((Count count) =>
-            count.isActive() &&
-            count.dateDifference(DateTime.now(), interval!) * -1 ==
-                counts.indexOf(count))
-        .where((Count count) => count.isCompleted())
+        .map((Count count) => count.getDateString(count.date, interval!))
+        .toSet()
+        .map((String dateString) => counts
+            .where((Count count) =>
+                count.getDateString(count.date, interval!) == dateString)
+            .toList())
+        .indexed
+        .takeWhile(((int, List<Count>) indexedCounts) =>
+            indexedCounts.$2.any((Count count) => count.isActive()) &&
+            indexedCounts.$2.any((Count count) =>
+                count.dateDifference(DateTime.now(), interval!) * -1 ==
+                indexedCounts.$1))
+        .where(((int, List<Count>) indexedCounts) =>
+            indexedCounts.$2.any((Count count) => count.isCompleted()))
+        .toList()
         .length;
   }
 }

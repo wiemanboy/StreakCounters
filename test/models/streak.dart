@@ -19,6 +19,17 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
+      test('duplicate days', () {
+        final Streak streak = createStreakWithCounts(StreakInterval.daily, [
+          createCountMinus(Duration(days: 0), CountState.completed),
+          createCountMinus(Duration(days: 0), CountState.completed),
+          createCountMinus(Duration(days: 0), CountState.completed),
+        ]);
+
+        expect(streak.getStreakLength(), equals(1));
+        expect(streak.isCompletedToday(), isTrue);
+      });
+
       test('Three day streak with a skipped day', () {
         final Streak streak = createStreakWithCounts(StreakInterval.daily, [
           createCountMinus(Duration(days: 2), CountState.completed),
@@ -36,7 +47,6 @@ void main() {
           createCountMinus(Duration(days: 1), CountState.missed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
-
         expect(streak.getStreakLength(), equals(1));
         expect(streak.isCompletedToday(), isTrue);
       });
@@ -95,7 +105,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Week streak with a skipped day', () {
+      test('Week streak with a skipped week', () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
           createCountMinus(Duration(days: 14), CountState.completed),
           createCountMinus(Duration(days: 7), CountState.skipped),
@@ -106,7 +116,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Week streak with a missed day', () {
+      test('Week streak with a missed week', () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
           createCountMinus(Duration(days: 14), CountState.completed),
           createCountMinus(Duration(days: 7), CountState.missed),
@@ -117,7 +127,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Week streak with a missing day', () {
+      test('Week streak with a missing week', () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
           createCountMinus(Duration(days: 14), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
@@ -127,14 +137,16 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Week streak with extra days', () {
+      test('Week streak with extra week', () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
+          createCountMinus(Duration(days: 9), CountState.completed),
+          createCountMinus(Duration(days: 8), CountState.completed),
           createCountMinus(Duration(days: 2), CountState.completed),
           createCountMinus(Duration(days: 1), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
-        expect(streak.getStreakLength(), equals(1));
+        expect(streak.getStreakLength(), equals(2));
         expect(streak.isCompletedToday(), isTrue);
       });
 
@@ -149,7 +161,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Month streak with a skipped day', () {
+      test('Month streak with a skipped month', () {
         final Streak streak = createStreakWithCounts(StreakInterval.monthly, [
           createCountMinus(Duration(days: 60), CountState.completed),
           createCountMinus(Duration(days: 30), CountState.skipped),
@@ -160,7 +172,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Month streak with a missed day', () {
+      test('Month streak with a missed month', () {
         final Streak streak = createStreakWithCounts(StreakInterval.monthly, [
           createCountMinus(Duration(days: 60), CountState.completed),
           createCountMinus(Duration(days: 30), CountState.missed),
@@ -171,7 +183,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Month streak with a missing day', () {
+      test('Month streak with a missing month', () {
         final Streak streak = createStreakWithCounts(StreakInterval.monthly, [
           createCountMinus(Duration(days: 60), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
@@ -192,7 +204,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Year streak with a skipped day', () {
+      test('Year streak with a skipped year', () {
         final Streak streak = createStreakWithCounts(StreakInterval.yearly, [
           createCountMinus(Duration(days: 600), CountState.completed),
           createCountMinus(Duration(days: 400), CountState.skipped),
@@ -203,10 +215,10 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Year streak with a missed day', () {
+      test('Year streak with a missed year', () {
         final Streak streak = createStreakWithCounts(StreakInterval.yearly, [
-          createCountMinus(Duration(days: 366), CountState.completed),
-          createCountMinus(Duration(days: 365), CountState.missed),
+          createCountMinus(Duration(days: 600), CountState.completed),
+          createCountMinus(Duration(days: 400), CountState.missed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -214,7 +226,7 @@ void main() {
         expect(streak.isCompletedToday(), isTrue);
       });
 
-      test('Year streak with a missing day', () {
+      test('Year streak with a missing year', () {
         final Streak streak = createStreakWithCounts(StreakInterval.yearly, [
           createCountMinus(Duration(days: 600), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),

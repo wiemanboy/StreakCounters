@@ -78,7 +78,9 @@ class Count {
   }
 
   int monthsDifference(DateTime date) {
-    return this.date.year * 12 + this.date.month - (date.year * 12 + date.month);
+    return this.date.year * 12 +
+        this.date.month -
+        (date.year * 12 + date.month);
   }
 
   int yearsDifference(DateTime date) {
@@ -103,11 +105,30 @@ class Count {
   }
 
   bool _isOnMonthly(DateTime date) {
-    return this.date.year == date.year &&
-        this.date.month == date.month;
+    return this.date.year == date.year && this.date.month == date.month;
   }
 
   bool _isOnYearly(DateTime date) {
     return this.date.year == date.year;
+  }
+
+  String getDateString(DateTime date, StreakInterval streakInterval) {
+    switch (streakInterval) {
+      case StreakInterval.daily:
+        return '${date.day}-${date.month}-${date.year}';
+      case StreakInterval.weekly:
+        return '${_getWeekOfYear(date)}-${date.year}';
+      case StreakInterval.monthly:
+        return '${date.month}-${date.year}';
+      case StreakInterval.yearly:
+        return '${date.year}';
+      default:
+        throw ArgumentError('Invalid streak interval');
+    }
+  }
+
+  @override
+  String toString() {
+    return 'date: ${getDateString(date, StreakInterval.daily)} $countState';
   }
 }
