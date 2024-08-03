@@ -105,7 +105,7 @@ class _StreakCounterState extends State<StreakCounter> {
                   Expanded(
                     child: Text(
                       widget.streak.name,
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      style: Theme.of(context).textTheme.headlineMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

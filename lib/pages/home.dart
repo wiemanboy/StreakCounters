@@ -38,7 +38,7 @@ class _CounterHomePageState extends State<CounterHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Counter App'),
+        title: Text('Streak Counters', style: Theme.of(context).textTheme.headlineLarge),
       ),
       body: ListView.builder(
         itemCount: streaks.length,

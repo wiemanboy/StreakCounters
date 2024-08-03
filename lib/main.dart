@@ -16,9 +16,20 @@ class CounterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Counter App',
+      title: 'Streak Counters',
       theme: ThemeData(
+        brightness: Brightness.dark,
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.black,
+        cardColor: Colors.grey[850],
+        appBarTheme: AppBarTheme(
+          color: Colors.purple[900],
+        ),
+        textTheme: TextTheme(
+          headlineLarge: TextStyle(color: Colors.white),
+          headlineSmall: TextStyle(color: Colors.white70),
+          bodyMedium: TextStyle(color: Colors.white70),
+        ),
       ),
       home: CounterHomePage(objectBox: objectBox),
     );
