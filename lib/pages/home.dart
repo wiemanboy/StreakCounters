@@ -24,13 +24,13 @@ class _CounterHomePageState extends State<CounterHomePage> {
 
   void loadStreakCounters() {
     setState(() {
-      streaks = widget.objectBox.getAllCounters();
+      streaks = widget.objectBox.getAllStreaks();
     });
   }
 
   void addCounter() {
     final newCounter = Streak(name: UniqueKey().toString());
-    widget.objectBox.addCounter(newCounter);
+    widget.objectBox.addStreak(newCounter);
     loadStreakCounters();
   }
 

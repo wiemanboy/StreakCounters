@@ -27,10 +27,10 @@ class _CounterWidgetState extends State<CounterWidget> {
     streakValue = widget.streak.getStreakLength();
   }
 
- void completeCounter() {
+  void completeCounter() {
     setState(() {
       widget.streak.completeToday();
-      widget.objectBox.updateCounter(widget.streak);
+      widget.objectBox.updateStreak(widget.streak);
       streakValue = widget.streak.getStreakLength();
     });
     widget.onUpdate();
@@ -45,21 +45,35 @@ class _CounterWidgetState extends State<CounterWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.streak.name,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            Text(
-              '$streakValue',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            Row(children: [
+              Text(
+                widget.streak.name,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ]),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
+                  onPressed: () {
+                    widget.objectBox.updateStreak(widget.streak);
+                    setState(() {
+                      streakValue = widget.streak.getStreakLength();
+                    });
+                    widget.onUpdate();
+                  },
+                  tooltip: 'See calendar',
+                  icon: Icon(Icons.calendar_month),
+                ),
+                Spacer(),
+                Text(
+                  '$streakValue',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                Spacer(),
+                IconButton(
                   onPressed: completeCounter,
-                  tooltip: 'Increment',
-                  icon: Icon(Icons.add),
+                  tooltip: 'Complete today',
+                  icon: Icon(Icons.check),
                 ),
               ],
             ),

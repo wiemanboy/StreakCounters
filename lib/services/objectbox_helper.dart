@@ -14,19 +14,19 @@ class ObjectBoxHelper {
     return ObjectBoxHelper._create(store);
   }
 
-  void addCounter(Streak counter) {
+  void addStreak(Streak counter) {
     counterBox.put(counter);
   }
 
-  List<Streak> getAllCounters() {
+  List<Streak> getAllStreaks() {
     return counterBox.getAll();
   }
 
-  void updateCounter(Streak counter) {
+  void updateStreak(Streak counter) {
     counterBox.put(counter);
   }
 
-  void removeCounter(int id) {
+  void removeStreak(int id) {
     counterBox.remove(id);
   }
 }
