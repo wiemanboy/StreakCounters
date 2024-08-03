@@ -24,7 +24,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 1364452685146486954),
       name: 'Streak',
-      lastPropertyId: const obx_int.IdUid(3, 8384775330454895822),
+      lastPropertyId: const obx_int.IdUid(4, 2787945016518704895),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -36,6 +36,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 8220556922898315814),
             name: 'name',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 2787945016518704895),
+            name: 'dbInterval',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -150,9 +155,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (Streak object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          fbb.startTable(4);
+          fbb.startTable(5);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
+          fbb.addInt64(3, object.dbInterval);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -162,7 +168,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
           final object = Streak(name: nameParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..dbInterval = const fb.Int64Reader()
+                .vTableGetNullable(buffer, rootOffset, 10);
           obx_int.InternalToManyAccess.setRelInfo<Streak>(
               object.counts,
               store,
@@ -215,6 +223,10 @@ class Streak_ {
   /// see [Streak.name]
   static final name =
       obx.QueryStringProperty<Streak>(_entities[0].properties[1]);
+
+  /// see [Streak.dbInterval]
+  static final dbInterval =
+      obx.QueryIntegerProperty<Streak>(_entities[0].properties[2]);
 
   /// see [Streak.counts]
   static final counts = obx.QueryBacklinkToMany<Count, Streak>(Count_.streak);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
-
-import '../widgets/streak_counter.dart';
+import 'package:streak_counters/widgets/streak_counter.dart';
+import 'package:streak_counters/models/enums/streak_interval.dart';
 
 class CounterHomePage extends StatefulWidget {
   final ObjectBoxHelper objectBox;
@@ -29,7 +29,7 @@ class _CounterHomePageState extends State<CounterHomePage> {
   }
 
   void addCounter() {
-    final newCounter = Streak(name: "New Counter");
+    final newCounter = Streak(name: "New Counter", interval: StreakInterval.daily);
     widget.objectBox.addStreak(newCounter);
     loadStreakCounters();
   }

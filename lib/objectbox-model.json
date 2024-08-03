@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "3:1364452685146486954",
-      "lastPropertyId": "3:8384775330454895822",
+      "lastPropertyId": "4:2787945016518704895",
       "name": "Streak",
       "properties": [
         {
@@ -18,6 +18,11 @@
           "id": "2:8220556922898315814",
           "name": "name",
           "type": 9
+        },
+        {
+          "id": "4:2787945016518704895",
+          "name": "dbInterval",
+          "type": 6
         }
       ],
       "relations": []
