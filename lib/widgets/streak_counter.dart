@@ -95,6 +95,7 @@ class _StreakCounterState extends State<StreakCounter> {
       ),
       child: Card(
         margin: EdgeInsets.all(10),
+        color: widget.streak.isCompletedToday() ? Colors.green[800] : null,
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
