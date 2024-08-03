@@ -29,7 +29,7 @@ class _CounterHomePageState extends State<CounterHomePage> {
   }
 
   void addCounter() {
-    final newCounter = Streak(name: UniqueKey().toString());
+    final newCounter = Streak(name: "New Counter");
     widget.objectBox.addStreak(newCounter);
     loadStreakCounters();
   }
@@ -43,7 +43,7 @@ class _CounterHomePageState extends State<CounterHomePage> {
       body: ListView.builder(
         itemCount: streaks.length,
         itemBuilder: (context, index) {
-          return CounterWidget(
+          return StreakCounter(
             streak: streaks[index],
             objectBox: widget.objectBox,
             onUpdate: loadStreakCounters,
