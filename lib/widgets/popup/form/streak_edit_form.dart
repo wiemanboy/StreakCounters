@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:streak_counters/models/streak.dart';
 
-class StreakEditForm extends StatelessWidget {
+import '../../../models/enums/streak_interval.dart';
+
+class StreakEditForm extends StatefulWidget {
   final Streak streak;
   final void Function(String) onSave;
 
@@ -11,9 +13,28 @@ class StreakEditForm extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController(text: streak.name);
+  _StreakEditFormState createState() => _StreakEditFormState();
+}
 
+class _StreakEditFormState extends State<StreakEditForm> {
+  late TextEditingController nameController;
+  late StreakInterval selectedInterval;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.streak.name);
+    selectedInterval = widget.streak.interval!;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Edit Streak'),
       content: Column(
@@ -22,6 +43,21 @@ class StreakEditForm extends StatelessWidget {
           TextField(
             controller: nameController,
             decoration: InputDecoration(labelText: 'Name'),
+          ),
+          DropdownButton<StreakInterval>(
+            isExpanded: true,
+            value: selectedInterval,
+            onChanged: (StreakInterval? newValue) {
+              setState(() {
+                selectedInterval = newValue!;
+              });
+            },
+            items: StreakInterval.values
+                .map((StreakInterval interval) => DropdownMenuItem(
+              value: interval,
+              child: Text(interval.toString().split('.').last),
+            ))
+                .toList(),
           ),
         ],
       ),
@@ -35,7 +71,8 @@ class StreakEditForm extends StatelessWidget {
         TextButton(
           onPressed: () {
             String newName = nameController.text;
-            onSave(newName);
+            widget.streak.interval = selectedInterval;
+            widget.onSave(newName);
             Navigator.of(context).pop();
           },
           child: Text('Save'),
