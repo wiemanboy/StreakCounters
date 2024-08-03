@@ -1,6 +1,7 @@
 import '../objectbox.dart';
 import 'count.dart';
 import 'enums/count_state.dart';
+import 'enums/streak_interval.dart';
 
 @Entity()
 class Streak {
@@ -12,21 +13,30 @@ class Streak {
   @Backlink()
   ToMany<Count> counts = ToMany<Count>();
 
-  Streak({required this.name});
+  @Transient()
+  StreakInterval? interval;
+
+  int? get dbInterval {
+    return interval?.index;
+  }
+
+  set dbInterval(int? value) {
+    interval = value != null ? StreakInterval.values[value] : null;
+  }
+
+  Streak({required this.name, this.interval});
 
   void completeToday() {
     addCount(Count(date: DateTime.now(), countState: CountState.completed));
   }
 
   void addCount(Count newCount) {
-    if (isCompletedToday()) {
-      return;
-    }
     counts.add(Count(date: newCount.date, countState: newCount.countState));
   }
 
   bool isActiveOn(DateTime date) {
-    return counts.any((Count count) => count.isOn(date) && count.isActive());
+    return counts
+        .any((Count count) => count.isOn(date, interval!) && count.isActive());
   }
 
   bool isActiveToday() {
@@ -34,7 +44,8 @@ class Streak {
   }
 
   bool isCompletedOn(DateTime date) {
-    return counts.any((Count count) => count.isOn(date) && count.isCompleted());
+    return counts.any(
+        (Count count) => count.isOn(date, interval!) && count.isCompleted());
   }
 
   bool isCompletedToday() {
@@ -49,11 +60,21 @@ class Streak {
     counts.sort((Count countA, Count countB) => countB.compareDate(countA));
 
     return counts
-        .takeWhile((Count count) =>
-            count.isActive() &&
-            count.dateDifference(DateTime.now()).inDays * -1 ==
-                counts.indexOf(count))
-        .where((Count count) => count.isCompleted())
+        .map((Count count) => count.getDateString(count.date, interval!))
+        .toSet()
+        .map((String dateString) => counts
+            .where((Count count) =>
+                count.getDateString(count.date, interval!) == dateString)
+            .toList())
+        .indexed
+        .takeWhile(((int, List<Count>) indexedCounts) =>
+            indexedCounts.$2.any((Count count) => count.isActive()) &&
+            indexedCounts.$2.any((Count count) =>
+                count.dateDifference(DateTime.now(), interval!) * -1 ==
+                indexedCounts.$1))
+        .where(((int, List<Count>) indexedCounts) =>
+            indexedCounts.$2.any((Count count) => count.isCompleted()))
+        .toList()
         .length;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:streak_counters/models/count.dart';
 import 'package:streak_counters/models/enums/count_state.dart';
+import 'package:streak_counters/models/enums/streak_interval.dart';
 
 void main() {
   group('Count Class Tests', () {
@@ -51,7 +52,7 @@ void main() {
       final DateTime testDate = DateTime(2024, 8, 1);
       final Count count = Count(date: testDate);
 
-      expect(count.isOn(testDate), isTrue);
+      expect(count.isOn(testDate, StreakInterval.daily), isTrue);
     });
 
     test('Should return false for isOn if dates do not match', () {
@@ -59,7 +60,7 @@ void main() {
       final DateTime testDate = DateTime(2024, 8, 2);
       final Count count = Count(date: countDate);
 
-      expect(count.isOn(testDate), isFalse);
+      expect(count.isOn(testDate, StreakInterval.daily), isFalse);
     });
   });
 }

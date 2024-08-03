@@ -110,6 +110,10 @@ class _StreakCounterState extends State<StreakCounter> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                    Text(
+                      widget.streak.interval.toString().split('.').last,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                 ],
               ),
               Row(
