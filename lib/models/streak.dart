@@ -52,13 +52,8 @@ class Streak {
     return isCompletedOn(DateTime.now());
   }
 
-  int getStreakLength() {
-    if (counts.isEmpty || !isActiveToday()) {
-      return 0;
-    }
-
+  List<List<Count>> getGroupedCounts() {
     counts.sort((Count countA, Count countB) => countB.compareDate(countA));
-
     return counts
         .map((Count count) => count.getDateString(count.date, interval!))
         .toSet()
@@ -66,6 +61,17 @@ class Streak {
             .where((Count count) =>
                 count.getDateString(count.date, interval!) == dateString)
             .toList())
+        .toList();
+  }
+
+  int getStreakLength() {
+    if (counts.isEmpty) {
+      return 0;
+    }
+
+    counts.sort((Count countA, Count countB) => countB.compareDate(countA));
+
+    return getGroupedCounts()
         .indexed
         .takeWhile(((int, List<Count>) indexedCounts) =>
             indexedCounts.$2.any((Count count) => count.isActive()) &&

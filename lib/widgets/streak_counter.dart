@@ -3,7 +3,10 @@ import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
 import 'package:streak_counters/widgets/popup/form/delete_form.dart';
 import 'package:streak_counters/widgets/popup/form/streak_edit_form.dart';
+import 'package:streak_counters/widgets/popup/info/raw_data_info.dart';
 import 'package:streak_counters/widgets/popup/options/edit_delete_options.dart';
+
+import '../models/count.dart';
 
 class StreakCounter extends StatefulWidget {
   final Streak streak;
@@ -63,6 +66,21 @@ class _StreakCounterState extends State<StreakCounter> {
     );
   }
 
+  void showCalendar() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RawDataInfo(
+          data:
+              "${widget.streak.name}\n\n"
+                  "${widget.streak.counts.map((Count count) => "${count.toString()}\n")}\n\n"
+                  "${widget.streak.getGroupedCounts()}\n\n"
+                  "${widget.streak.getStreakLength()}",
+        );
+      },
+    );
+  }
+
   void updateStreakValue() {
     setState(() {
       streakValue = widget.streak.getStreakLength();
@@ -110,22 +128,16 @@ class _StreakCounterState extends State<StreakCounter> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                    Text(
-                      widget.streak.interval.toString().split('.').last,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
+                  Text(
+                    widget.streak.interval.toString().split('.').last,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ],
               ),
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      widget.objectBox.updateStreak(widget.streak);
-                      setState(() {
-                        streakValue = widget.streak.getStreakLength();
-                      });
-                      widget.onUpdate();
-                    },
+                    onPressed: showCalendar,
                     tooltip: 'See calendar',
                     icon: Icon(Icons.calendar_month),
                   ),
