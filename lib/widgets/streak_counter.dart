@@ -14,11 +14,11 @@ class StreakCounter extends StatefulWidget {
   final VoidCallback onUpdate;
 
   StreakCounter({
-    Key? key,
+    super.key,
     required this.streak,
     required this.objectBox,
     required this.onUpdate,
-  }) : super(key: key);
+  });
 
   @override
   _StreakCounterState createState() => _StreakCounterState();

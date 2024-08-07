@@ -112,7 +112,7 @@ class Count {
     return this.date.year == date.year;
   }
 
-  String getDateString(DateTime date, StreakInterval streakInterval) {
+  String getDateString(StreakInterval streakInterval) {
     switch (streakInterval) {
       case StreakInterval.daily:
         return '${date.day}-${date.month}-${date.year}';
@@ -129,6 +129,6 @@ class Count {
 
   @override
   String toString() {
-    return 'date: ${getDateString(date, StreakInterval.daily)} $countState';
+    return 'date: ${getDateString(StreakInterval.daily)} $countState';
   }
 }
