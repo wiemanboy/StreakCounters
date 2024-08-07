@@ -109,6 +109,21 @@ void main() {
       });
     });
 
+    test('Maintained streak', () {
+      withClock(Clock.fixed(DateTime(2024, 8, 7)), () {
+        final Streak streak = createStreakWithCounts(StreakInterval.daily, [
+          Count(date: DateTime(2024, 8, 3), countState: CountState.completed),
+          Count(date: DateTime(2024, 8, 4), countState: CountState.completed),
+          Count(date: DateTime(2024, 8, 5), countState: CountState.completed),
+          Count(date: DateTime(2024, 8, 6), countState: CountState.completed),
+          Count(date: DateTime(2024, 8, 7), countState: CountState.completed),
+        ]);
+
+        expect(streak.getStreakLength(), equals(5));
+        expect(streak.isActiveToday(), isTrue);
+      });
+    });
+
     test('Week streak', () {
       withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
@@ -173,13 +188,14 @@ void main() {
       });
     });
 
-    test('Testcase', () {
+    test('Not yet completed this week', () {
       withClock(Clock.fixed(DateTime(2024, 8, 7)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
+          Count(date: DateTime(2024, 7, 28), countState: CountState.completed),
           Count(date: DateTime(2024, 8, 3), countState: CountState.completed),
         ]);
 
-        expect(streak.getStreakLength(), equals(1));
+        expect(streak.getStreakLength(), equals(2));
         expect(streak.isActiveToday(), isTrue);
       });
     });
@@ -264,8 +280,8 @@ void main() {
     test('Year streak with a missed year', () {
       withClock(Clock.fixed(DateTime(2000)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.yearly, [
-          createCountMinus(Duration(days: 600), CountState.completed),
-          createCountMinus(Duration(days: 400), CountState.missed),
+          createCountMinus(Duration(days: 366), CountState.completed),
+          createCountMinus(Duration(days: 365), CountState.missed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -278,7 +294,7 @@ void main() {
   test('Year streak with a missing year', () {
     withClock(Clock.fixed(DateTime(2000)), () {
       final Streak streak = createStreakWithCounts(StreakInterval.yearly, [
-        createCountMinus(Duration(days: 600), CountState.completed),
+        createCountMinus(Duration(days: 366), CountState.completed),
         createCountMinus(Duration(days: 0), CountState.completed),
       ]);
 
