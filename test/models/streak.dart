@@ -110,10 +110,10 @@ void main() {
     });
 
     test('Week streak', () {
-      withClock(Clock.fixed(DateTime(2000)), () {
+      withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 14), CountState.completed),
-          createCountMinus(Duration(days: 7), CountState.completed),
+          createCountMinus(Duration(days: 8), CountState.completed),
+          createCountMinus(Duration(days: 1), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -123,10 +123,10 @@ void main() {
     });
 
     test('Week streak with a skipped week', () {
-      withClock(Clock.fixed(DateTime(2000)), () {
+      withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 14), CountState.completed),
-          createCountMinus(Duration(days: 7), CountState.skipped),
+          createCountMinus(Duration(days: 8), CountState.completed),
+          createCountMinus(Duration(days: 1), CountState.skipped),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -136,10 +136,10 @@ void main() {
     });
 
     test('Week streak with a missed week', () {
-      withClock(Clock.fixed(DateTime(2000)), () {
+      withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 14), CountState.completed),
-          createCountMinus(Duration(days: 7), CountState.missed),
+          createCountMinus(Duration(days: 8), CountState.completed),
+          createCountMinus(Duration(days: 1), CountState.missed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -149,9 +149,9 @@ void main() {
     });
 
     test('Week streak with a missing week', () {
-      withClock(Clock.fixed(DateTime(2000)), () {
+      withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 14), CountState.completed),
+          createCountMinus(Duration(days: 8), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
@@ -161,13 +161,25 @@ void main() {
     });
 
     test('Week streak with extra week', () {
-      withClock(Clock.fixed(DateTime(2000)), () {
+      withClock(Clock.fixed(DateTime(2000, DateTime.january, 3)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 13), CountState.completed),
-          createCountMinus(Duration(days: 6), CountState.completed),
-          createCountMinus(Duration(days: 5), CountState.completed),
+          createCountMinus(Duration(days: 8), CountState.completed),
+          createCountMinus(Duration(days: 7), CountState.completed),
+          createCountMinus(Duration(days: 1), CountState.completed),
+          createCountMinus(Duration(days: 0), CountState.completed),
         ]);
         expect(streak.getStreakLength(), equals(3));
+        expect(streak.isActiveToday(), isTrue);
+      });
+    });
+
+    test('Testcase', () {
+      withClock(Clock.fixed(DateTime(2024, 8, 7)), () {
+        final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
+          Count(date: DateTime(2024, 8, 3), countState: CountState.completed),
+        ]);
+
+        expect(streak.getStreakLength(), equals(1));
         expect(streak.isActiveToday(), isTrue);
       });
     });
