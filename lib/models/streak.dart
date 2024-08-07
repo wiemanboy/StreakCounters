@@ -36,8 +36,13 @@ class Streak {
     counts.add(Count(date: newCount.date, countState: newCount.countState));
   }
 
-  bool isActiveOn(DateTime _) {
-    return counts.any((Count count) => count.isActive());
+  bool isGoing() {
+    return getStreakLength() > 0;
+  }
+
+  bool isActiveOn(DateTime date) {
+    return counts.any(
+            (Count count) => count.isOn(date, interval!) && count.isActive());
   }
 
   bool isActiveToday() {
@@ -79,10 +84,10 @@ class Streak {
             indexedCounts.$2.any((Count count) {
               final dateDifference =
                   count.dateDifference(clock.now(), interval!) * -1;
-              if (indexedCounts.$1 != 0) {
+              if (isActiveToday()) {
                 return dateDifference == indexedCounts.$1;
               }
-              return dateDifference <= indexedCounts.$1 + 1;
+              return dateDifference == indexedCounts.$1 + 1;
             }))
         .where(((int, List<Count>) indexedCounts) =>
             indexedCounts.$2.any((Count count) => count.isCompleted()))

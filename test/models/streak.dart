@@ -196,7 +196,7 @@ void main() {
         ]);
 
         expect(streak.getStreakLength(), equals(2));
-        expect(streak.isActiveToday(), isTrue);
+        expect(streak.isGoing(), isTrue);
       });
     });
 
