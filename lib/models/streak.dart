@@ -60,8 +60,8 @@ class Streak {
         .map((Count count) => count.getDateString(interval!))
         .toSet()
         .map((String dateString) => counts
-            .where((Count count) =>
-                count.getDateString(interval!) == dateString)
+            .where(
+                (Count count) => count.getDateString(interval!) == dateString)
             .toList())
         .toList();
   }

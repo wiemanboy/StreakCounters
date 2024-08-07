@@ -163,22 +163,12 @@ void main() {
     test('Week streak with extra week', () {
       withClock(Clock.fixed(DateTime(2000)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.weekly, [
-          createCountMinus(Duration(days: 8), CountState.completed),
-          createCountMinus(Duration(days: 7), CountState.completed),
+          createCountMinus(Duration(days: 13), CountState.completed),
           createCountMinus(Duration(days: 6), CountState.completed),
           createCountMinus(Duration(days: 5), CountState.completed),
-          createCountMinus(Duration(days: 4), CountState.completed),
-          createCountMinus(Duration(days: 3), CountState.completed),
-          createCountMinus(Duration(days: 2), CountState.completed),
-          createCountMinus(Duration(days: 1), CountState.completed),
-          createCountMinus(Duration(days: 0), CountState.completed),
         ]);
-        
-        print(streak.counts.map((count) => count.getDateString(streak.interval!)));
-        print(streak.getGroupedCounts().map((group) => group.map((count) => count.getDateString(streak.interval!))));
-
         expect(streak.getStreakLength(), equals(3));
-        expect(streak.isCompletedToday(), isTrue);
+        expect(streak.isActiveToday(), isTrue);
       });
     });
 

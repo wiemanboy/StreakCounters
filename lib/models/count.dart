@@ -40,16 +40,7 @@ class Count {
   }
 
   bool isOn(DateTime date, StreakInterval interval) {
-    switch (interval) {
-      case StreakInterval.daily:
-        return _isOnDaily(date);
-      case StreakInterval.weekly:
-        return _isOnWeekly(date);
-      case StreakInterval.monthly:
-        return _isOnMonthly(date);
-      case StreakInterval.yearly:
-        return _isOnYearly(date);
-    }
+    return getDateString(interval) == _getDateStringOn(date, interval);
   }
 
   int compareDate(Count other) {
@@ -59,31 +50,36 @@ class Count {
   int dateDifference(DateTime date, StreakInterval interval) {
     switch (interval) {
       case StreakInterval.daily:
-        return dayDifference(date);
+        return _dayDifference(date);
       case StreakInterval.weekly:
-        return weeksDifference(date);
+        return _weeksDifference(date);
       case StreakInterval.monthly:
-        return monthsDifference(date);
+        return _monthsDifference(date);
       case StreakInterval.yearly:
-        return yearsDifference(date);
+        return _yearsDifference(date);
     }
   }
 
-  int dayDifference(DateTime date) {
+  String getDateString(StreakInterval streakInterval) {
+    return _getDateStringOn(date, streakInterval);
+  }
+
+  int _dayDifference(DateTime date) {
     return this.date.difference(date).inDays;
   }
 
-  int weeksDifference(DateTime date) {
-    return (this.date.difference(date).inDays / 7).round();
+  int _weeksDifference(DateTime date) {
+    return (_getWeekOfYear(this.date) + this.date.year * 52) -
+        (_getWeekOfYear(date) + date.year * 52);
   }
 
-  int monthsDifference(DateTime date) {
+  int _monthsDifference(DateTime date) {
     return this.date.year * 12 +
         this.date.month -
         (date.year * 12 + date.month);
   }
 
-  int yearsDifference(DateTime date) {
+  int _yearsDifference(DateTime date) {
     return this.date.year - date.year;
   }
 
@@ -93,37 +89,16 @@ class Count {
     return ((daysElapsed + startOfYear.weekday - 1) ~/ 7) + 1;
   }
 
-  bool _isOnDaily(DateTime date) {
-    return this.date.year == date.year &&
-        this.date.month == date.month &&
-        this.date.day == date.day;
-  }
-
-  bool _isOnWeekly(DateTime date) {
-    return this.date.year == date.year &&
-        _getWeekOfYear(this.date) == _getWeekOfYear(date);
-  }
-
-  bool _isOnMonthly(DateTime date) {
-    return this.date.year == date.year && this.date.month == date.month;
-  }
-
-  bool _isOnYearly(DateTime date) {
-    return this.date.year == date.year;
-  }
-
-  String getDateString(StreakInterval streakInterval) {
-    switch (streakInterval) {
+  String _getDateStringOn(DateTime date, StreakInterval interval) {
+    switch (interval) {
       case StreakInterval.daily:
         return '${date.day}-${date.month}-${date.year}';
       case StreakInterval.weekly:
-        return '${_getWeekOfYear(date)}-${date.year}';
+        return '${_getWeekOfYear(date) + date.year * 52}';
       case StreakInterval.monthly:
         return '${date.month}-${date.year}';
       case StreakInterval.yearly:
         return '${date.year}';
-      default:
-        throw ArgumentError('Invalid streak interval');
     }
   }
 
