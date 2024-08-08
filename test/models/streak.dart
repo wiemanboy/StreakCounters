@@ -110,7 +110,7 @@ void main() {
     });
 
     test('Maintained streak', () {
-      withClock(Clock.fixed(DateTime(2024, 8, 7)), () {
+      withClock(Clock.fixed(DateTime(2024, 8, 8)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.daily, [
           Count(date: DateTime(2024, 8, 3), countState: CountState.completed),
           Count(date: DateTime(2024, 8, 4), countState: CountState.completed),

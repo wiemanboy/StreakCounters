@@ -42,16 +42,25 @@ class Streak {
 
   bool isActiveOn(DateTime date) {
     return counts.any(
-            (Count count) => count.isOn(date, interval!) && count.isActive());
+            (Count count) => count.isActiveOn(date, interval!));
   }
 
   bool isActiveToday() {
     return isActiveOn(clock.now());
   }
 
+  bool isSkippedOn(DateTime date) {
+    return counts.any(
+        (Count count) => count.isOn(date, interval!) && count.isSkipped());
+  }
+
   bool isCompletedOn(DateTime date) {
     return counts.any(
         (Count count) => count.isOn(date, interval!) && count.isCompleted());
+  }
+
+  bool isSkippedToday() {
+    return isSkippedOn(clock.now());
   }
 
   bool isCompletedToday() {
@@ -84,7 +93,7 @@ class Streak {
             indexedCounts.$2.any((Count count) {
               final dateDifference =
                   count.dateDifference(clock.now(), interval!) * -1;
-              if (isActiveToday()) {
+              if (isCompletedToday() || isSkippedToday()) {
                 return dateDifference == indexedCounts.$1;
               }
               return dateDifference == indexedCounts.$1 + 1;

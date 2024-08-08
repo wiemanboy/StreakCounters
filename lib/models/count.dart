@@ -106,4 +106,26 @@ class Count {
   String toString() {
     return 'date: ${getDateString(StreakInterval.daily)} $countState';
   }
+
+  isActiveOn(DateTime date, StreakInterval streakInterval) {
+    if (!isActive()) {
+      return true;
+    }
+    if (isOn(date, streakInterval)) {
+      return true;
+    }
+    if (streakInterval == StreakInterval.daily) {
+      return isOn(date.subtract(Duration(days: 1)), streakInterval);
+    }
+    if (streakInterval == StreakInterval.weekly) {
+      return isOn(date.subtract(Duration(days: 7)), streakInterval);
+    }
+    if (streakInterval == StreakInterval.monthly) {
+      return isOn(date.subtract(Duration(days: 30)), streakInterval);
+    }
+    if (streakInterval == StreakInterval.yearly) {
+      return isOn(date.subtract(Duration(days: 365)), streakInterval);
+    }
+    return false;
+  }
 }
