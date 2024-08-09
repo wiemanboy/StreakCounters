@@ -73,8 +73,7 @@ class _StreakCounterState extends State<StreakCounter> {
         return RawDataInfo(
           data:
               "${widget.streak.name}\n\n"
-                  "${widget.streak.counts.map((Count count) => "${count.toString()}\n")}\n\n"
-                  "${widget.streak.getGroupedCounts()}\n\n"
+                  "${widget.streak.getGroupedStreaks()}\n\n"
                   "${widget.streak.getStreakLength()}",
         );
       },
