@@ -58,7 +58,7 @@ void main() {
       });
     });
 
-    test('Missiong count objects', () {
+    test('Missing count objects', () {
       withClock(Clock.fixed(DateTime(2000)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.daily, [
           createCountMinus(Duration(days: 3), CountState.completed),
