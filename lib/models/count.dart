@@ -65,7 +65,9 @@ class Count {
   }
 
   int _dayDifference(DateTime date) {
-    return this.date.difference(date).inDays;
+    return DateTime(this.date.year, this.date.month, this.date.day)
+        .difference(DateTime(date.year, date.month, date.day))
+        .inDays;
   }
 
   int _weeksDifference(DateTime date) {

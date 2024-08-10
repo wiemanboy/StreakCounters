@@ -10,12 +10,13 @@ void main() {
     test('Three day streak', () {
       withClock(Clock.fixed(DateTime(2000)), () {
         final Streak streak = createStreakWithCounts(StreakInterval.daily, [
-          createCountMinus(Duration(days: 2), CountState.completed),
-          createCountMinus(Duration(days: 1), CountState.completed),
+          createCountMinus(Duration(hours: 49), CountState.completed),
+          createCountMinus(Duration(hours: 25), CountState.completed),
+          createCountMinus(Duration(hours: 1), CountState.completed),
           createCountMinus(Duration(days: 0), CountState.completed),
         ]);
 
-        expect(streak.getStreakLength(), equals(3));
+        expect(streak.getStreakLength(), equals(4));
         expect(streak.isCompletedToday(), isTrue);
       });
     });
