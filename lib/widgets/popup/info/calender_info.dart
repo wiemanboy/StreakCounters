@@ -18,7 +18,7 @@ class CalenderInfo extends StatelessWidget {
         child: Column(
           children: [
             Text(streak.name),
-            Calender(counts: streak.counts),
+            Calender(counts: streak.counts, interval: streak.interval!),
             Text('Longest streak: ${streak.getLongestStreak()}'),
           ],
         ),
