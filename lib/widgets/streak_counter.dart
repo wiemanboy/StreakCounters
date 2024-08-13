@@ -3,10 +3,8 @@ import 'package:streak_counters/models/streak.dart';
 import 'package:streak_counters/services/objectbox_helper.dart';
 import 'package:streak_counters/widgets/popup/form/delete_form.dart';
 import 'package:streak_counters/widgets/popup/form/streak_edit_form.dart';
-import 'package:streak_counters/widgets/popup/info/raw_data_info.dart';
+import 'package:streak_counters/widgets/popup/info/calender_info.dart';
 import 'package:streak_counters/widgets/popup/options/edit_delete_options.dart';
-
-import '../models/count.dart';
 
 class StreakCounter extends StatefulWidget {
   final Streak streak;
@@ -70,11 +68,8 @@ class _StreakCounterState extends State<StreakCounter> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return RawDataInfo(
-          data:
-              "${widget.streak.name}\n\n"
-                  "${widget.streak.getGroupedStreaks()}\n\n"
-                  "${widget.streak.getStreakLength()}",
+        return CalenderInfo(
+          streak: widget.streak,
         );
       },
     );
