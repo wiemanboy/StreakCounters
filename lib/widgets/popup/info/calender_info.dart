@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../models/streak.dart';
 import '../../calender.dart';
 
@@ -13,12 +12,16 @@ class CalenderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Column(
-        children: [
-          Text(streak.name),
-          Calender(streaks: streak.getGroupedStreaks()),
-          Text('Longest streak: ${streak.getLongestStreak()}'),
-        ],
+      content: SizedBox(
+        width: 300,
+        height: 350,
+        child: Column(
+          children: [
+            Text(streak.name),
+            Calender(counts: streak.counts),
+            Text('Longest streak: ${streak.getLongestStreak()}'),
+          ],
+        ),
       ),
     );
   }
