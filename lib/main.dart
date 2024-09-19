@@ -22,6 +22,7 @@ class CounterApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.black,
         cardColor: Colors.grey[850],
+        primaryColor: Colors.purple[900],
         appBarTheme: AppBarTheme(
           color: Colors.purple[900],
         ),

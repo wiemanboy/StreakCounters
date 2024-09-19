@@ -126,4 +126,10 @@ class Streak {
 
     return getGroupedStreaks().first.length;
   }
+
+  getLongestStreak() {
+    return getGroupedStreaks()
+        .map((List<List<Count>> streak) => streak.length)
+        .reduce((int longest, int current) => current > longest ? current : longest);
+  }
 }
